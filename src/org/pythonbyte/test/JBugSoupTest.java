@@ -24,9 +24,9 @@ public class JBugSoupTest extends TestCase {
     }
 
     public void testFindOccurancesByBugGuideTaxonId() {
-        JBugSoupResultSet resultSet = JBugSoup.findOccurancesByBugGuideTaxonId( 191845 );
+        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByBugGuideTaxonId( 191845 );
 
-        assertEquals( 3, resultSet.getResults().size() );
+        assertEquals( 4, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );
         assertTrue( resultSet.hasResultValue( "Manitoba" ) );
         assertTrue( resultSet.hasResultValue( "New Brunswick" ) );
@@ -34,9 +34,9 @@ public class JBugSoupTest extends TestCase {
     }
 
     public void testFindOccurancesByScientificName() {
-        JBugSoupResultSet resultSet = JBugSoup.findOccurancesByScientificName( "Coenagrion interrogatum" );
+        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByScientificName( "Coenagrion interrogatum" );
 
-        assertEquals( 3, resultSet.getResults().size() );
+        assertEquals( 4, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );
         assertTrue( resultSet.hasResultValue( "Manitoba" ) );
         assertTrue( resultSet.hasResultValue( "New Brunswick" ) );

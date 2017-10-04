@@ -4,45 +4,43 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.pythonbyte.java.jbugsoup.helpers.UrlHelpers;
 
 import java.io.IOException;
 
 public class JBugSoup {
-    public static JBugSoupResultSet findOccurancesByBugGuideTaxonId(int bugGuideTaxonId ) {
+    public static JBugSoupResultSet findOccurrencesByBugGuideTaxonId( int bugGuideTaxonId ) {
         JBugSoupResultSet resultSet = new JBugSoupResultSet();
         try {
-            Document dataPageDocument = getPageDocumentForUrl( getBugGuideDataUrlForTaxonId( bugGuideTaxonId ) );
+            Document dataPageDocument = getPageDocumentForUrl( UrlHelpers.getBugGuideDataUrlForTaxonId( bugGuideTaxonId ) );
 
-            Elements stateColumnTds = dataPageDocument.getElementsByClass( "bgdata-state-column" );
-
-            if ( stateColumnTds.size() == 0 ) {
-                resultSet.addError( "The BugGuide taxon ID you have provided seems to not exist," );
-            } else {
-                stateColumnTds.forEach(currentElement -> {
-                    resultSet.addResult(currentElement.text());
-                });
-            }
-        } catch (IOException e) {
+            addStateColumnTdsToResultSet( resultSet, dataPageDocument );
+        } catch ( IOException e ) {
             resultSet.addError( "IOException when attempting to access BugGuide.net [" + e.getMessage() + "]" );
         }
         return resultSet;
     }
+
+    private static void addStateColumnTdsToResultSet( JBugSoupResultSet resultSet, Document dataPageDocument ) {
+        Elements stateColumnTds = dataPageDocument.getElementsByClass( "bgdata-state-column" );
+
+        if ( stateColumnTds.size() == 0 ) {
+            resultSet.addError( BugGuideConfiguration.TAXON_ID_DOES_NOT_EXIST_MESSAGE );
+        } else {
+            stateColumnTds.forEach( currentElement -> {
+                resultSet.addResult( currentElement.text() );
+            });
+        }
+    }
+
     private static Document getPageDocumentForUrl(String url ) throws IOException {
         Connection connection = Jsoup.connect( url );
 
         return connection.get();
     }
 
-    private static String getBugGuideDataUrlForTaxonId(int bugGuideTaxonId) {
-        return BugGuideConfiguration.URL_PREFIX + "/node/view/" + bugGuideTaxonId + "/data";
-    }
-
-   private static String getBugGuideAdvancedTaxonSearchUrl(String searchValue) {
-        return BugGuideConfiguration.URL_PREFIX + "/adv_search/taxon.php?q=" + searchValue;
-    }
-
     public static Boolean isBugGuideTaxonIdInState(int bugGuideTaxonId, String stateName ) {
-        JBugSoupResultSet resultSet = JBugSoup.findOccurancesByBugGuideTaxonId( bugGuideTaxonId );
+        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByBugGuideTaxonId( bugGuideTaxonId );
 
         if ( resultSet.hasErrors() ) {
             return null;
@@ -52,7 +50,7 @@ public class JBugSoup {
     }
 
     public static Boolean isScientificNameInState(String scientificName, String stateName ) {
-        JBugSoupResultSet resultSet = JBugSoup.findOccurancesByScientificName( scientificName );
+        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByScientificName( scientificName );
 
         if ( resultSet.hasErrors() ) {
             return null;
@@ -61,24 +59,25 @@ public class JBugSoup {
         return resultSet.hasResultValue( stateName );
     }
 
-    public static JBugSoupResultSet findOccurancesByScientificName(String scientificName) {
+    public static JBugSoupResultSet findOccurrencesByScientificName( String scientificName ) {
         JBugSoupResultSet resultSet = new JBugSoupResultSet();
         try {
-            Document dataPageDocument = getPageDocumentForUrl( getBugGuideDataUrlForTaxonId( Integer.valueOf( findBugGuideTaxonIdByScientificName( scientificName ).getIndividualResult() ) ) );
+            JBugSoupResultSet bugGuideTaxonIdResultSet = findBugGuideTaxonIdByScientificName( scientificName );
 
-            Elements stateColumnTds = dataPageDocument.getElementsByClass( "bgdata-state-column" );
-
-            if ( stateColumnTds.size() == 0 ) {
-                resultSet.addError( "The BugGuide taxon ID you have provided seems to not exist," );
+            if ( !bugGuideTaxonIdResultSet.hasErrors() ) {
+                addStateColumnTdsToResultSet( resultSet, getDataPageDocumentForTaxon( bugGuideTaxonIdResultSet.getIndividualResult() ) );
             } else {
-                stateColumnTds.forEach(currentElement -> {
-                    resultSet.addResult(currentElement.text());
-                });
+                resultSet.addError( BugGuideConfiguration.TAXON_ID_DOES_NOT_EXIST_MESSAGE );
             }
         } catch (IOException e) {
             resultSet.addError( "IOException when attempting to access BugGuide.net [" + e.getMessage() + "]" );
         }
         return resultSet;
+    }
+
+    private static Document getDataPageDocumentForTaxon( String taxonIdValue ) throws IOException {
+        String bugGuideDataUrlForTaxon = UrlHelpers.getBugGuideDataUrlForTaxonId( Integer.valueOf( taxonIdValue ) );
+        return  getPageDocumentForUrl( bugGuideDataUrlForTaxon );
     }
 
     public static JBugSoupResultSet findScientificNameByBugGuideTaxonId(int bugGuideTaxonId) {
@@ -92,7 +91,7 @@ public class JBugSoup {
     private static JBugSoupResultSet findValueFromAdvancedSearchByBugGuideTaxonId(int bugGuideTaxonId, int index) {
         JBugSoupResultSet resultSet = new JBugSoupResultSet();
         try {
-            Document dataPageDocument = getPageDocumentForUrl( getBugGuideAdvancedTaxonSearchUrl( String.valueOf( bugGuideTaxonId ) ) );
+            Document dataPageDocument = getPageDocumentForUrl( UrlHelpers.getBugGuideAdvancedTaxonSearchUrl( String.valueOf( bugGuideTaxonId ) ) );
 
             String dataPageDocumentText = dataPageDocument.text();
             String[] dataPageDocumentTextSplit = dataPageDocumentText.split( BugGuideConfiguration.ADVANCED_SEARCH_DELIMITER_CHARACTER_REGEX );
@@ -112,7 +111,7 @@ public class JBugSoup {
     private static JBugSoupResultSet findValueFromAdvancedSearchByScientificName( String scientificName, int index) {
         JBugSoupResultSet resultSet = new JBugSoupResultSet();
         try {
-            Document dataPageDocument = getPageDocumentForUrl( getBugGuideAdvancedTaxonSearchUrl( scientificName ) );
+            Document dataPageDocument = getPageDocumentForUrl( UrlHelpers.getBugGuideAdvancedTaxonSearchUrl( scientificName ) );
 
             String dataPageDocumentText = dataPageDocument.text();
             String[] dataPageDocumentTextSplit = dataPageDocumentText.split( BugGuideConfiguration.ADVANCED_SEARCH_DELIMITER_CHARACTER_REGEX );
