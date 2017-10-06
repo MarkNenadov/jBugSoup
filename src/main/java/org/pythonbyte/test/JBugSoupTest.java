@@ -35,6 +35,7 @@ public class JBugSoupTest extends TestCase {
 
     public void testFindOccurancesByScientificName() {
         JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByScientificName( "Coenagrion interrogatum" );
+        resultSet.getErrors().forEach( System.out::println );
 
         assertEquals( 4, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );

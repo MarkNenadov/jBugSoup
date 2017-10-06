@@ -8,6 +8,6 @@ public class UrlHelpers {
     }
 
     public static String getBugGuideAdvancedTaxonSearchUrl( String searchValue ) {
-        return BugGuideConfiguration.URL_PREFIX + "/adv_search/taxon.php?q=" + searchValue;
+        return BugGuideConfiguration.URL_PREFIX + "adv_search/taxon.php?q=" + searchValue.replace( " ", "%20");
     }
 }
