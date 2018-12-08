@@ -5,14 +5,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JBugSoupTest {
+    private static final int COENAGRION_INTERROGATUM_ID = 191845;
+
     @Test
     public void testFindBugGuideTaxonIdByScientificName() {
-        assertEquals( "191845", JBugSoup.findBugGuideTaxonIdByScientificName( "Coenagrion interrogatum" ).getIndividualResult() );
+        assertEquals( "191845", JBugSoup.findTaxonIdByScientificName( "Coenagrion interrogatum" ).getIndividualResult() );
     }
 
     @Test
     public void testFindScientificNameByBugGuideTaxonId() {
-        JBugSoupResultSet resultSet = JBugSoup.findScientificNameByBugGuideTaxonId( 191845 );
+        JBugSoupResultSet resultSet = JBugSoup.findScientificNameByTaxonId( COENAGRION_INTERROGATUM_ID );
 
         assertNotNull( resultSet.getIndividualResult() );
         assertEquals( "Coenagrion interrogatum", resultSet.getIndividualResult() );
@@ -20,7 +22,7 @@ public class JBugSoupTest {
 
     @Test
     public void testFindCommonNameByBugGuideTaxonId() {
-        JBugSoupResultSet resultSet = JBugSoup.findCommonNameByBugGuideTaxonId( 191845 );
+        JBugSoupResultSet resultSet = JBugSoup.findCommonNameByTaxonId( COENAGRION_INTERROGATUM_ID );
 
         assertNotNull( resultSet.getIndividualResult() );
         assertEquals( "Subarctic Bluet", resultSet.getIndividualResult() );
@@ -28,7 +30,7 @@ public class JBugSoupTest {
 
     @Test
     public void testFindOccurancesByBugGuideTaxonId() {
-        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByBugGuideTaxonId( 191845 );
+        JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByTaxonId( COENAGRION_INTERROGATUM_ID );
 
         assertEquals( 4, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );
@@ -51,9 +53,9 @@ public class JBugSoupTest {
 
     @Test
     public void testIsBugGuideTaxonIdInState() {
-        assertNull( JBugSoup.isBugGuideTaxonIdInState( 1, "Ontario" ) ); // taxon id doesn't exist
-        assertFalse( JBugSoup.isBugGuideTaxonIdInState( 191845, "Ontario" ) );
-        assertTrue( JBugSoup.isBugGuideTaxonIdInState( 191845, "Manitoba" ) );
+        assertNull( JBugSoup.isTaxonIdInState( 1, "Ontario" ) ); // taxon id doesn't exist
+        assertFalse( JBugSoup.isTaxonIdInState( COENAGRION_INTERROGATUM_ID, "Ontario" ) );
+        assertTrue( JBugSoup.isTaxonIdInState( COENAGRION_INTERROGATUM_ID, "Manitoba" ) );
     }
 
     @Test

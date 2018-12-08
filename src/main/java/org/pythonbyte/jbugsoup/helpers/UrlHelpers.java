@@ -3,8 +3,8 @@ package org.pythonbyte.jbugsoup.helpers;
 import org.pythonbyte.jbugsoup.BugGuideConfiguration;
 
 public class UrlHelpers {
-    public static String getBugGuideDataUrlForTaxonId( int bugGuideTaxonId ) {
-        return BugGuideConfiguration.URL_PREFIX + "/node/view/" + bugGuideTaxonId + "/data";
+    public static String getBugGuideDataUrlForTaxonId( int taxonId ) {
+        return BugGuideConfiguration.URL_PREFIX + "/node/view/" + taxonId + "/data";
     }
 
     public static String getBugGuideAdvancedTaxonSearchUrl( String searchValue ) {
