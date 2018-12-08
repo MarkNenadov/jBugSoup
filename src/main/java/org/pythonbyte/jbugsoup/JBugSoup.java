@@ -1,10 +1,9 @@
-package org.pythonbyte.java.jbugsoup;
+package org.pythonbyte.jbugsoup;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.pythonbyte.java.jbugsoup.helpers.UrlHelpers;
+import org.pythonbyte.jbugsoup.helpers.UrlHelpers;
 
 import java.io.IOException;
 

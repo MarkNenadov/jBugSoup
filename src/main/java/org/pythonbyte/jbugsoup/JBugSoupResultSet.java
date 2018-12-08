@@ -1,4 +1,4 @@
-package org.pythonbyte.java.jbugsoup;
+package org.pythonbyte.jbugsoup;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

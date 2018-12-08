@@ -1,6 +1,6 @@
-package org.pythonbyte.java.jbugsoup.helpers;
+package org.pythonbyte.jbugsoup.helpers;
 
-import org.pythonbyte.java.jbugsoup.BugGuideConfiguration;
+import org.pythonbyte.jbugsoup.BugGuideConfiguration;
 
 public class UrlHelpers {
     public static String getBugGuideDataUrlForTaxonId( int bugGuideTaxonId ) {

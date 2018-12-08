@@ -1,4 +1,4 @@
-package org.pythonbyte.java.jbugsoup;
+package org.pythonbyte.jbugsoup;
 
 public class BugGuideConfiguration {
     public static final String URL_PREFIX = "http://bugguide.net/";
