@@ -6,18 +6,31 @@
 
     <groupId>org.pythonbyte</groupId>
     <artifactId>jBugSoup</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1</version>
+    <packaging>jar</packaging>
+    <name>jBugSoup</name>
+    <description>A library for scraping data from BugGuide.net</description>
+    <url>https://github.com/MarkNenadov/jBugSoup</url>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, Version 3</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/MarkNenadov/jBugSoup.git</url>
+    </scm>
+
+    <properties>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>1.10</maven.compiler.target>
+    </properties>
+
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <finalName>${project.name}</finalName>
     </build>
 
     <dependencies>
