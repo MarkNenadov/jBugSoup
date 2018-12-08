@@ -14,23 +14,11 @@ public class JBugSoup {
         try {
             Document dataPageDocument = getPageDocumentForUrl( UrlHelpers.getBugGuideDataUrlForTaxonId( bugGuideTaxonId ) );
 
-            addStateColumnTdsToResultSet( resultSet, dataPageDocument );
+            resultSet.addStateColumnData( dataPageDocument );
         } catch ( IOException e ) {
             resultSet.addError( "IOException when attempting to access BugGuide.net [" + e.getMessage() + "]" );
         }
         return resultSet;
-    }
-
-    private static void addStateColumnTdsToResultSet( JBugSoupResultSet resultSet, Document dataPageDocument ) {
-        Elements stateColumnTds = dataPageDocument.getElementsByClass( "bgdata-state-column" );
-
-        if ( stateColumnTds.size() == 0 ) {
-            resultSet.addError( BugGuideConfiguration.TAXON_ID_DOES_NOT_EXIST_MESSAGE );
-        } else {
-            stateColumnTds.forEach( currentElement -> {
-                resultSet.addResult( currentElement.text() );
-            });
-        }
     }
 
     private static Document getPageDocumentForUrl(String url ) throws IOException {
@@ -65,7 +53,7 @@ public class JBugSoup {
             JBugSoupResultSet bugGuideTaxonIdResultSet = findBugGuideTaxonIdByScientificName( scientificName );
 
             if ( !bugGuideTaxonIdResultSet.hasErrors() ) {
-                addStateColumnTdsToResultSet( resultSet, getDataPageDocumentForTaxon( bugGuideTaxonIdResultSet.getIndividualResult() ) );
+                resultSet.addStateColumnData( getDataPageDocumentForTaxon( bugGuideTaxonIdResultSet.getIndividualResult() ) );
             } else {
                 resultSet.addError( BugGuideConfiguration.TAXON_ID_DOES_NOT_EXIST_MESSAGE );
             }

@@ -1,5 +1,8 @@
 package org.pythonbyte.java.jbugsoup;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,4 +49,18 @@ public class JBugSoupResultSet {
 
         return results.get( 0 );
     }
+
+    public void addStateColumnData( Document dataPageDocument ) {
+        Elements stateColumnTds = dataPageDocument.getElementsByClass( "bgdata-state-column" );
+
+        if ( stateColumnTds.size() == 0 ) {
+            addError( BugGuideConfiguration.TAXON_ID_DOES_NOT_EXIST_MESSAGE );
+        } else {
+            stateColumnTds.forEach( currentElement -> {
+                addResult( currentElement.text() );
+            });
+        }
+    }
+
+
 }
