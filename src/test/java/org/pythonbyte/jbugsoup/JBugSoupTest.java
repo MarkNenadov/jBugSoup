@@ -32,7 +32,7 @@ public class JBugSoupTest {
     public void testFindOccurancesByBugGuideTaxonId() {
         JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByTaxonId( COENAGRION_INTERROGATUM_ID );
 
-        assertEquals( 4, resultSet.getResults().size() );
+        assertEquals( 5, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );
         assertTrue( resultSet.hasResultValue( "Manitoba" ) );
         assertTrue( resultSet.hasResultValue( "New Brunswick" ) );
@@ -44,7 +44,7 @@ public class JBugSoupTest {
         JBugSoupResultSet resultSet = JBugSoup.findOccurrencesByScientificName( "Coenagrion interrogatum" );
         resultSet.getErrors().forEach( System.out::println );
 
-        assertEquals( 4, resultSet.getResults().size() );
+        assertEquals( 5, resultSet.getResults().size() );
         assertEquals( 0, resultSet.getErrors().size() );
         assertTrue( resultSet.hasResultValue( "Manitoba" ) );
         assertTrue( resultSet.hasResultValue( "New Brunswick" ) );
