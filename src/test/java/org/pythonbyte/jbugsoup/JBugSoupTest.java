@@ -9,7 +9,10 @@ public class JBugSoupTest {
 
     @Test
     public void testFindBugGuideTaxonIdByScientificName() {
-        assertEquals( "191845", JBugSoup.findTaxonIdByScientificName( "Coenagrion interrogatum" ).getIndividualResult() );
+        assertEquals(
+                "191845",
+                JBugSoup.findTaxonIdByScientificName( "Coenagrion interrogatum" ).getIndividualResult()
+        );
     }
 
     @Test
@@ -60,7 +63,10 @@ public class JBugSoupTest {
 
     @Test
     public void testIsScientificNameInState() {
-        assertNull( JBugSoup.isScientificNameInState( "No existo", "Ontario" ) ); // taxon id doesn't exist
+        assertNull(
+            JBugSoup.isScientificNameInState("No existo","Ontario")
+        ); // taxon id doesn't exist
+
         assertFalse( JBugSoup.isScientificNameInState( "Coenagrion interrogatum", "Ontario" ) );
         assertTrue( JBugSoup.isScientificNameInState( "Coenagrion interrogatum", "Manitoba" ) );
     }
